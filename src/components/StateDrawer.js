@@ -103,7 +103,7 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations }) => {
 
       {showModal && selectedReservation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1001]">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-2xl font-bold text-gray-800">
                 {selectedReservation.properties.BASENAME}
@@ -129,9 +129,11 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations }) => {
                 <p className="text-gray-600">Class: {selectedReservation.properties.MTFCC}</p>
               </div>
 
-              <pre className="bg-gray-50 p-4 rounded text-sm overflow-x-auto">
-                {JSON.stringify(selectedReservation.properties, null, 2)}
-              </pre>
+              <div className="max-h-[40vh] overflow-y-auto">
+                <pre className="bg-gray-50 p-4 rounded text-sm overflow-x-auto">
+                  {JSON.stringify(selectedReservation.properties, null, 2)}
+                </pre>
+              </div>
             </div>
           </div>
         </div>
