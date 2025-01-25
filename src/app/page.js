@@ -65,7 +65,7 @@ export default function Home() {
         <p>Built with Next.js and React Leaflet</p>
         <a
           className="hover:underline hover:underline-offset-4"
-          href="https://github.com/yourusername"
+          href="https://www.linkedin.com/in/sunthecoder/"
           target="_blank"
           rel="noopener noreferrer"
         >
