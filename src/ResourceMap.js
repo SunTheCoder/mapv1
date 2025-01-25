@@ -21,7 +21,7 @@ const REGION_STATES = {
   'West Central': ['MT', 'ID', 'WY', 'UT', 'CO', 'AZ', 'NM', 'ND', 'SD', 'NE', 'KS', 'IA', 'MN', 'MO'],
   'South Central': ['TX', 'OK', 'AR', 'LA'],
   'East Central': ['WI', 'MI', 'IL', 'IN', 'OH', 'KY', 'TN', 'WV', 'VA'],
-  'Southeast': ['NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'PR'],
+  'Southeast': ['NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'PR', 'VI'],
   'Northeast': ['ME', 'NH', 'VT', 'MA', 'RI', 'CT', 'NY', 'PA', 'NJ', 'DE', 'MD', 'DC']
 };
 
