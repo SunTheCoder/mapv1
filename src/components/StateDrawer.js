@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import * as L from 'leaflet';
 
-const StateDrawer = ({ isOpen, onClose, stateData, reservations }) => {
+const StateDrawer = ({ isOpen, onClose, stateData, reservations, epaData }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  console.log(epaData);
 
   if (!stateData) {
     return (
@@ -127,6 +129,16 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations }) => {
                 <h3 className="font-semibold text-gray-700">Administrative Details</h3>
                 <p className="text-gray-600">FIPS Code: {selectedReservation.properties.GEOID}</p>
                 <p className="text-gray-600">Class: {selectedReservation.properties.MTFCC}</p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-gray-700">EPA Status</h3>
+                <p className="text-gray-600">
+                  {epaData.features.find(epa => epa.properties.GEOID === selectedReservation.properties.ID)?.properties.Disadvantaged ? 
+                    <span className="text-red-600 font-medium">Disadvantaged Community</span> : 
+                    <span className="text-green-600 font-medium">Not Disadvantaged</span>
+                  }
+                </p>
               </div>
 
               <div className="max-h-[40vh] overflow-y-auto">

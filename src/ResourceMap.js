@@ -364,6 +364,7 @@ const ResourceMap = () => {
         isOpen={drawerState.isOpen}
         stateData={drawerState.stateData}
         reservations={geoData.reservations}
+        epaData={epaData}
       />
     </div>
   );
