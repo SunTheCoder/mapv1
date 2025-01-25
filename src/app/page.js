@@ -2,19 +2,15 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="flex min-h-screen flex-col items-center justify-center p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-8 items-center text-center">
         <h1 className="text-4xl font-bold">CEC Interactive Map Demo</h1>
         
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose dark:prose-invert max-w-none text-left">
           <p className="text-lg">
-            A demonstration of interactive mapping capabilities built with:
+            A demonstration of interactive mapping capabilities for the CEC website.
           </p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>Next.js 15</li>
-            <li>React Leaflet for map integration</li>
-            <li>Tailwind CSS for styling</li>
-          </ul>
+          
         </div>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
@@ -65,7 +61,7 @@ export default function Home() {
         </div>
       </main>
       
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center text-sm text-gray-600 dark:text-gray-400">
+      <footer className="flex gap-6 flex-wrap items-center justify-center text-sm text-gray-600 dark:text-gray-400">
         <p>Built with Next.js and React Leaflet</p>
         <a
           className="hover:underline hover:underline-offset-4"
