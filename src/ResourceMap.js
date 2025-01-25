@@ -119,6 +119,14 @@ const processRegionsData = (states) => {
   };
 };
 
+// S3 URLs for GeoJSON files
+const S3_URLS = {
+  states: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/us-state-boundaries.geojson',
+  counties: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/georef-united-states-of-america-county.geojson',
+  cities: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/us_cities.geojson',
+  reservations: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/other_reservation.geojson'
+};
+
 const ResourceMap = () => {
   const hasReservationsNearby = (feature, type) => {
     if (!geoData.reservations) return false;
@@ -140,9 +148,9 @@ const ResourceMap = () => {
   };
 
   const [geoData, setGeoData] = useState({
-    cities: null,
     states: null,
     counties: null,
+    cities: null,
     reservations: null
   });
   const [selectedFeature, setSelectedFeature] = useState(null);
@@ -155,40 +163,33 @@ const ResourceMap = () => {
   const [isLegendExpanded, setIsLegendExpanded] = useState(false);
 
   useEffect(() => {
-    const loadGeoData = async () => {
+    const fetchGeoData = async () => {
       try {
-        const [cities, states, counties, reservations] = await Promise.all([
-          fetch('/us_cities.geojson').then(res => res.json()),
-          fetch('/us-state-boundaries.geojson').then(res => res.json()),
-          fetch('/georef-united-states-of-america-county.geojson').then(res => res.json()),
-          fetch('/other_reservation.geojson').then(res => res.json())
+        console.log('Fetching GeoJSON data from S3...');
+        const responses = await Promise.all([
+          fetch(S3_URLS.states),
+          fetch(S3_URLS.counties),
+          fetch(S3_URLS.cities),
+          fetch(S3_URLS.reservations)
         ]);
 
-        // Filter cities to only include those with reservations nearby
-        const citiesWithReservations = {
-          ...cities,
-          features: cities.features.filter(feature => {
-            const cityPoint = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-            return reservations.features.some(reservation => {
-              const [lon, lat] = reservation.geometry.coordinates[0][0];
-              const reservationPoint = L.latLng(lat, lon);
-              return cityPoint.distanceTo(reservationPoint) <= 100000;
-            });
-          })
-        };
+        const [states, counties, cities, reservations] = await Promise.all(
+          responses.map(r => r.json())
+        );
 
+        console.log('Successfully loaded GeoJSON data from S3');
         setGeoData({
-          cities: citiesWithReservations,
           states,
           counties,
+          cities,
           reservations
         });
       } catch (error) {
-        console.error("Error loading GeoJSON:", error);
+        console.error('Error loading GeoJSON data:', error);
       }
     };
 
-    loadGeoData();
+    fetchGeoData();
   }, []);
 
   useEffect(() => {
