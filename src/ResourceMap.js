@@ -38,6 +38,7 @@ const ResourceMap = () => {
     isOpen: false,
     stateData: null
   });
+  const [isLegendExpanded, setIsLegendExpanded] = useState(false);
 
   useEffect(() => {
     const loadGeoData = async () => {
@@ -157,65 +158,80 @@ const ResourceMap = () => {
         style={{ height: "100%", width: "100%" }}
       >
         {/* Info Box */}
-        <div className="leaflet-bottom leaflet-right" style={{ margin: "20px", marginLeft: "70px" }}>
-          <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md max-w-xs">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <div style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  backgroundColor: "#2563eb",
-                  opacity: 0.3,
-                  border: "1px solid #2563eb"
-                }}></div>
-                <p className="text-sm font-medium">States with Tribal Nations</p>
+        <div className="leaflet-bottom leaflet-right" style={{ margin: "20px", marginLeft: "70px", zIndex: 1000, pointerEvents: "auto" }}>
+          <div className={`bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-xs transition-all duration-300 ${!isLegendExpanded ? 'w-48' : ''}`}>
+            <button 
+              onClick={() => setIsLegendExpanded(!isLegendExpanded)}
+              className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+              style={{zIndex: 1001}}
+              title={isLegendExpanded ? "Hide legend" : "Show legend"}
+            >
+              {isLegendExpanded ? '←' : '→'}
+            </button>
+            
+            {!isLegendExpanded ? (
+              <p className="text-sm font-medium text-center">Click arrow to view map legend</p>
+            ) : (
+              <div className="opacity-100">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: "#2563eb",
+                      opacity: 0.3,
+                      border: "1px solid #2563eb"
+                    }}></div>
+                    <p className="text-sm font-medium">States with Tribal Nations</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: "#999",
+                      opacity: 0.3,
+                      border: "1px solid #999"
+                    }}></div>
+                    <p className="text-sm font-medium">County Boundaries</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: "#22c55e",
+                      opacity: 0.8,
+                      border: "1px solid #000",
+                      borderRadius: "50%"
+                    }}></div>
+                    <p className="text-sm font-medium">Cities near Tribal Nations</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: "#060",
+                      opacity: 0.3,
+                      border: "1px solid #060"
+                    }}></div>
+                    <p className="text-sm font-medium">Tribal Nation Boundaries</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: "#ef4444",
+                      opacity: 0.3,
+                      border: "1px solid #ef4444"
+                    }}></div>
+                    <p className="text-sm font-medium">EPA Communities</p>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-2">
+                    Click on a highlighted area to view more information. <br></br>
+                    Each layer has unique information.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  backgroundColor: "#999",
-                  opacity: 0.3,
-                  border: "1px solid #999"
-                }}></div>
-                <p className="text-sm font-medium">County Boundaries</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  backgroundColor: "#22c55e",
-                  opacity: 0.8,
-                  border: "1px solid #000",
-                  borderRadius: "50%"
-                }}></div>
-                <p className="text-sm font-medium">Cities near Tribal Nations</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  backgroundColor: "#060",
-                  opacity: 0.3,
-                  border: "1px solid #060"
-                }}></div>
-                <p className="text-sm font-medium">Tribal Nation Boundaries</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div style={{ 
-                  width: "20px", 
-                  height: "20px", 
-                  backgroundColor: "#ef4444",
-                  opacity: 0.3,
-                  border: "1px solid #ef4444"
-                }}></div>
-                <p className="text-sm font-medium">EPA Communities</p>
-              </div>
-            <p className="text-xs text-gray-600 mt-2">
-              Click on a highlighted area to view more information. <br></br>
-              Each layer has unique information.
-            </p>
-            </div>
+            )}
           </div>
         </div>
 
