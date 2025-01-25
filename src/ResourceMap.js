@@ -5,6 +5,120 @@ import * as L from 'leaflet';
 import { epaDataManager } from './utils/epaDataManager';
 import StateDrawer from './components/StateDrawer';
 
+const REGION_COLORS = {
+  'Pacific West': '#2B5D8C',    // Blue
+  'West Central': '#F7941D',    // Orange
+  'South Central': '#4F9B55',   // Green
+  'East Central': '#C1272D',    // Red
+  'Southeast': '#FFF200',       // Yellow
+  'Northeast': '#92278F',       // Purple
+  'Native Tribes': '#666666'    // Gray (though this might not be visible on the map)
+};
+
+// First, let's define the state mappings
+const REGION_STATES = {
+  'Pacific West': ['WA', 'OR', 'CA', 'NV', 'AK', 'HI'],
+  'West Central': ['MT', 'ID', 'WY', 'UT', 'CO', 'AZ', 'NM', 'ND', 'SD', 'NE', 'KS', 'IA', 'MN', 'MO'],
+  'South Central': ['TX', 'OK', 'AR', 'LA'],
+  'East Central': ['WI', 'MI', 'IL', 'IN', 'OH', 'KY', 'TN', 'WV', 'VA'],
+  'Southeast': ['NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'PR'],
+  'Northeast': ['ME', 'NH', 'VT', 'MA', 'RI', 'CT', 'NY', 'PA', 'NJ', 'DE', 'MD', 'DC']
+};
+
+const REGIONS_DATA = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Pacific West',
+        region: 6,
+        description: 'Including Am. Samoa, Guam, Northern Mariana Islands'
+      },
+      geometry: null
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'West Central',
+        region: 5,
+        description: ''
+      },
+      geometry: null
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'South Central',
+        region: 4,
+        description: ''
+      },
+      geometry: null
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'East Central',
+        region: 2,
+        description: ''
+      },
+      geometry: null
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Southeast',
+        region: 3,
+        description: 'Including Puerto Rico & U.S. Virgin Islands'
+      },
+      geometry: null
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Northeast',
+        region: 1,
+        description: ''
+      },
+      geometry: null
+    }
+  ]
+};
+
+const processRegionsData = (states) => {
+  if (!states) return REGIONS_DATA;
+
+  return {
+    ...REGIONS_DATA,
+    features: REGIONS_DATA.features.map(region => {
+      // Filter states using the stusab property from us-state-boundaries
+      const regionStates = states.features.filter(state => 
+        REGION_STATES[region.properties.name]?.includes(state.properties.stusab)
+      );
+
+      if (regionStates.length === 0) return region;
+
+      const combinedGeometry = {
+        type: 'MultiPolygon',
+        coordinates: regionStates.flatMap(state => {
+          // Handle the geometry from us-state-boundaries format
+          const coords = state.geometry.coordinates;
+          if (state.geometry.type === 'MultiPolygon') {
+            return coords;
+          }
+          // If it's a Polygon, wrap it in an extra array to make it MultiPolygon format
+          return [coords];
+        })
+      };
+
+      return {
+        ...region,
+        geometry: combinedGeometry
+      };
+    })
+  };
+};
+
 const ResourceMap = () => {
   const hasReservationsNearby = (feature, type) => {
     if (!geoData.reservations) return false;
@@ -148,6 +262,25 @@ const ResourceMap = () => {
         });
       }
     });
+  };
+
+  const regionStyle = (feature) => {
+    return {
+      fillColor: REGION_COLORS[feature.properties.name],
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.3
+    };
+  };
+
+  const onEachRegion = (feature, layer) => {
+    layer.bindPopup(`
+      <h3 class="font-bold">${feature.properties.name}</h3>
+      <p>Region ${feature.properties.region}</p>
+      ${feature.properties.description ? `<p>${feature.properties.description}</p>` : ''}
+    `);
   };
 
   return (
@@ -302,6 +435,18 @@ const ResourceMap = () => {
                     </div>
                   `);
                 }}
+              />
+            )}
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay checked name="Grant Regions">
+            {geoData.states && (
+              <GeoJSON 
+                key="grant-regions"
+                data={processRegionsData(geoData.states)}
+                style={regionStyle}
+                onEachFeature={onEachRegion}
+                zIndex={1000}
               />
             )}
           </LayersControl.Overlay>
