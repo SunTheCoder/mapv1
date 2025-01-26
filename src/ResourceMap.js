@@ -396,7 +396,7 @@ const ResourceMap = () => {
             />}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name="Tribal Nations">
+          <LayersControl.Overlay name="Tribal Nations">
             {geoData.reservations && <GeoJSON 
               data={geoData.reservations} 
               style={{color: '#060', weight: 1, fillOpacity: 0.1}}
@@ -441,7 +441,7 @@ const ResourceMap = () => {
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay checked name="Grant Regions">
+          <LayersControl.Overlay name="Grant Regions">
             {geoData.states && (
               <GeoJSON 
                 key="grant-regions"
