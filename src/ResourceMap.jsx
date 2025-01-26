@@ -131,59 +131,6 @@ const S3_URLS = {
   reservations: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/other_reservation.geojson'
 };
 
-// Add this new component for the regions legend
-const RegionsLegend = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  return (
-    <div className="leaflet-top leaflet-right" style={{ margin: "470px", marginRight: "20px", zIndex: 1000, pointerEvents: "auto" }}>
-      <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md relative">
-        <button 
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-          style={{zIndex: 1001}}
-          title={isCollapsed ? "Show regions" : "Hide regions"}
-        >
-          <span className="text-gray-700">
-            {isCollapsed ? '→' : '←'}
-          </span>
-        </button>
-
-        {!isCollapsed ? (
-          <>
-            <h3 className="font-bold text-gray-800 text-lg mb-4">CEC Grant Regions</h3>
-            <div className="flex flex-col gap-2">
-              {Object.entries(REGION_COLORS).map(([region, color]) => (
-                <div key={region} className="flex items-center gap-3">
-                  <div style={{ 
-                    width: "24px", 
-                    height: "24px", 
-                    backgroundColor: color,
-                    opacity: 0.7,
-                    border: "1px solid rgba(0,0,0,0.2)",
-                    borderRadius: "4px"
-                  }}></div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">{region}</p>
-                    {region === 'Pacific West' && (
-                      <p className="text-xs text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
-                    )}
-                    {region === 'Southeast' && (
-                      <p className="text-xs text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <p className="text-sm font-medium text-gray-800 pr-4">Grant Regions</p>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const ResourceMap = () => {
   const hasReservationsNearby = (feature, type) => {
     if (!geoData.reservations) return false;
@@ -365,88 +312,6 @@ const ResourceMap = () => {
         zoom={4}
         style={{ height: "100%", width: "100%" }}
       >
-        {/* Add the RegionsLegend component */}
-        {activeLayers.includes('regions') && <RegionsLegend />}
-
-        {/* Info Box */}
-        <div className="leaflet-bottom leaflet-right" style={{ margin: "20px", marginLeft: "70px", zIndex: 1000, pointerEvents: "auto" }}>
-          <div className={`bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-xs transition-all duration-300 ${!isLegendExpanded ? 'w-48' : ''}`}>
-            <button 
-              onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-              className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-              style={{zIndex: 1001}}
-              title={isLegendExpanded ? "Hide legend" : "Show legend"}
-            >
-              <span className="text-gray-700">
-                {isLegendExpanded ? '←' : '→'}
-              </span>
-            </button>
-            {!isLegendExpanded ? (
-              <p className="text-sm font-medium text-center text-gray-800">Click arrow to view map legend</p>
-            ) : (
-              <div className="opacity-100">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <div style={{ 
-                      width: "20px", 
-                      height: "20px", 
-                      backgroundColor: "#2563eb",
-                      opacity: 0.3,
-                      border: "1px solid #2563eb"
-                    }}></div>
-                    <p className="text-sm font-medium text-gray-800">States with Tribal Nations</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div style={{ 
-                      width: "20px", 
-                      height: "20px", 
-                      backgroundColor: "#999",
-                      opacity: 0.3,
-                      border: "1px solid #999"
-                    }}></div>
-                    <p className="text-sm font-medium text-gray-800">County Boundaries</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div style={{ 
-                      width: "20px", 
-                      height: "20px", 
-                      backgroundColor: "#22c55e",
-                      opacity: 0.8,
-                      border: "1px solid #000",
-                      borderRadius: "50%"
-                    }}></div>
-                    <p className="text-sm font-medium text-gray-800">Cities near Tribal Nations</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div style={{ 
-                      width: "20px", 
-                      height: "20px", 
-                      backgroundColor: "#060",
-                      opacity: 0.3,
-                      border: "1px solid #060"
-                    }}></div>
-                    <p className="text-sm font-medium text-gray-800">Tribal Nation Boundaries</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div style={{ 
-                      width: "20px", 
-                      height: "20px", 
-                      backgroundColor: "#ef4444",
-                      opacity: 0.3,
-                      border: "1px solid #ef4444"
-                    }}></div>
-                    <p className="text-sm font-medium text-gray-800">EPA Communities</p>
-                  </div>
-                  <p className="text-xs text-gray-600 mt-2">
-                    Click on a highlighted area to view more information. <br></br>
-                    Each layer has unique information.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -592,6 +457,112 @@ const ResourceMap = () => {
           </Popup>
         )}
       </MapContainer>
+
+      <div className="leaflet-bottom leaflet-right" style={{ margin: "20px", marginLeft: "70px", zIndex: 1000, pointerEvents: "auto" }}>
+        <div className={`bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-xs transition-all duration-300 ${!isLegendExpanded ? 'w-48' : ''}`}>
+          <button 
+            onClick={() => setIsLegendExpanded(!isLegendExpanded)}
+            className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+            style={{zIndex: 1001}}
+            title={isLegendExpanded ? "Hide legend" : "Show legend"}
+          >
+            <span className="text-gray-700">
+              {isLegendExpanded ? '←' : '→'}
+            </span>
+          </button>
+          {!isLegendExpanded ? (
+            <p className="text-sm font-medium text-center text-gray-800">Click arrow to view map legend</p>
+          ) : (
+            <div className="opacity-100">
+              <div className="flex flex-col gap-2">
+                {/* CEC Regions Section */}
+                <h3 className="font-medium text-gray-800 mb-2">CEC Regional Partners</h3>
+                {Object.entries(REGION_COLORS).map(([region, color]) => (
+                  <div key={region} className="flex items-center gap-2">
+                    <div style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      backgroundColor: color,
+                      opacity: 0.7,
+                      border: "1px solid rgba(0,0,0,0.2)",
+                      borderRadius: "4px"
+                    }}></div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">{region}</p>
+                      {region === 'Pacific West' && (
+                        <p className="text-xs text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
+                      )}
+                      {region === 'Southeast' && (
+                        <p className="text-xs text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                <div className="border-t border-gray-200 my-4"></div>
+
+                {/* Other Layers Section */}
+                <h3 className="font-medium text-gray-800 mb-2">Other Layers</h3>
+                <div className="flex items-center gap-2">
+                  <div style={{ 
+                    width: "20px", 
+                    height: "20px", 
+                    backgroundColor: "#2563eb",
+                    opacity: 0.3,
+                    border: "1px solid #2563eb"
+                  }}></div>
+                  <p className="text-sm font-medium text-gray-800">States with Tribal Nations</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div style={{ 
+                    width: "20px", 
+                    height: "20px", 
+                    backgroundColor: "#999",
+                    opacity: 0.3,
+                    border: "1px solid #999"
+                  }}></div>
+                  <p className="text-sm font-medium text-gray-800">County Boundaries</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div style={{ 
+                    width: "20px", 
+                    height: "20px", 
+                    backgroundColor: "#22c55e",
+                    opacity: 0.8,
+                    border: "1px solid #000",
+                    borderRadius: "50%"
+                  }}></div>
+                  <p className="text-sm font-medium text-gray-800">Cities near Tribal Nations</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div style={{ 
+                    width: "20px", 
+                    height: "20px", 
+                    backgroundColor: "#060",
+                    opacity: 0.3,
+                    border: "1px solid #060"
+                  }}></div>
+                  <p className="text-sm font-medium text-gray-800">Tribal Nation Boundaries</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div style={{ 
+                    width: "20px", 
+                    height: "20px", 
+                    backgroundColor: "#ef4444",
+                    opacity: 0.3,
+                    border: "1px solid #ef4444"
+                  }}></div>
+                  <p className="text-sm font-medium text-gray-800">EPA Communities</p>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  Click on a highlighted area to view more information. <br></br>
+                  Each layer has unique information.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       <StateDrawer
         isOpen={drawerState.isOpen}
