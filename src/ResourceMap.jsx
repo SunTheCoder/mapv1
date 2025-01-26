@@ -10,13 +10,13 @@ import { epaDataManager } from './utils/epaDataManager';
 import StateDrawer from './components/StateDrawer';
 
 const REGION_COLORS = {
-  'Pacific West': '#2B5D8C',    // Blue
-  'West Central': '#F7941D',    // Orange
-  'South Central': '#4F9B55',   // Green
-  'East Central': '#C1272D',    // Red
-  'Southeast': '#FFF200',       // Yellow
-  'Northeast': '#92278F',       // Purple
-  'Native Tribes': '#666666'    // Gray (though this might not be visible on the map)
+  'Northeast': '#69C3E5',       // Light Blue (Region 1)
+  'East Central': '#FF6B6B',    // Coral Red (Region 2)
+  'Southeast': '#FF9F5B',       // Orange (Region 3)
+  'South Central': '#E5A1E5',   // Light Purple (Region 4)
+  'West Central': '#FFE066',    // Yellow (Region 5)
+  'Pacific West': '#98E698',    // Light Green (Region 6)
+  'Native Tribes': '#7FDBDA'    // Turquoise (Region 6 Native Tribes)
 };
 
 // First, let's define the state mappings
