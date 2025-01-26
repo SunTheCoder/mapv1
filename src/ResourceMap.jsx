@@ -433,11 +433,40 @@ const ResourceMap = () => {
   };
 
   const onEachRegion = (feature, layer) => {
-    layer.bindPopup(`
-      <h3 class="font-bold">${feature.properties.name}</h3>
-      <p>Region ${feature.properties.region}</p>
-      ${feature.properties.description ? `<p>${feature.properties.description}</p>` : ''}
-    `);
+    layer.on({
+      mouseover: (e) => {
+        layer.setStyle({
+          fillOpacity: 0.7,
+          weight: 3
+        });
+      },
+      mouseout: (e) => {
+        layer.setStyle({
+          fillOpacity: 0.3,
+          weight: 2
+        });
+      },
+      click: (e) => {
+        // Always handle state clicks regardless of layer visibility
+        const stateName = feature.properties.name;
+        const bounds = layer.getBounds();
+        setDrawerState({
+          isOpen: true,
+          stateData: {
+            name: stateName,
+            bounds: {
+              minLat: bounds.getSouth(),
+              maxLat: bounds.getNorth(),
+              minLng: bounds.getWest(),
+              maxLng: bounds.getEast()
+            },
+            epaData: epaData?.features.filter(f => 
+              isPointInBounds(f.geometry.coordinates, bounds)
+            )
+          }
+        });
+      }
+    });
   };
 
   const filterCitiesNearReservations = (cities, reservations) => {
