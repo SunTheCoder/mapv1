@@ -206,12 +206,12 @@ const PacificInsetMap = React.memo(({ geoData, regionStyle }) => {
         {!isCollapsed ? (
           <>
             <h4 className="text-lg font-bold mb-2 text-gray-800">Pacific Territories</h4>
-            <p className="text-xs text-gray-600 mb-2">Part of Pacific West Region</p>
+            <p className="text-sm text-gray-600 mb-2">Part of Pacific West Region</p>
             <MapContainer 
               key="pacific-inset"
               center={[14.5, 145.5]}
               zoom={6}
-              style={{ height: "300px", width: "370px" }}
+              style={{ height: "300px", width: "400px" }}
               zoomControl={true}
               dragging={true}
               scrollWheelZoom={true}
@@ -268,7 +268,7 @@ const PacificInsetMap = React.memo(({ geoData, regionStyle }) => {
                 />
               )}
             </MapContainer>
-            <div className="mt-2 text-xs text-gray-600">
+            <div className="mt-2 text-sm text-gray-600">
               <p>• Interactive map of Guam and Northern Mariana Islands</p>
               <p>• Click territories for details</p>
               <p>• Zoom and pan enabled</p>
