@@ -21,7 +21,7 @@ const REGION_COLORS = {
 
 // First, let's define the state mappings
 const REGION_STATES = {
-  'Pacific West': ['WA', 'OR', 'CA', 'NV', 'AK', 'HI'],
+  'Pacific West': ['WA', 'OR', 'CA', 'NV', 'AK', 'HI', 'AS', 'GU', 'MP'],
   'West Central': ['MT', 'ID', 'WY', 'UT', 'CO', 'AZ', 'NM', 'ND', 'SD', 'NE', 'KS', 'IA', 'MN', 'MO'],
   'South Central': ['TX', 'OK', 'AR', 'LA'],
   'East Central': ['WI', 'MI', 'IL', 'IN', 'OH', 'KY', 'TN', 'WV', 'VA'],
@@ -100,17 +100,64 @@ const processRegionsData = (states) => {
         REGION_STATES[region.properties.name]?.includes(state.properties.stusab)
       );
 
+      // For Pacific West region, add territories if they're not in the states data
+      if (region.properties.name === 'Pacific West') {
+        // Add placeholder geometries for territories if needed
+        const territories = {
+          'AS': { // American Samoa
+            coordinates: [-170.7, -14.3],
+            name: 'American Samoa'
+          },
+          'GU': { // Guam
+            coordinates: [144.8, 13.4],
+            name: 'Guam'
+          },
+          'MP': { // Northern Mariana Islands
+            coordinates: [145.7, 15.2],
+            name: 'Northern Mariana Islands'
+          }
+        };
+
+        // Create point features for territories
+        const territoryFeatures = Object.entries(territories)
+          .filter(([code]) => !regionStates.some(state => state.properties.stusab === code))
+          .map(([code, data]) => ({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: data.coordinates
+            },
+            properties: {
+              stusab: code,
+              name: data.name
+            }
+          }));
+
+        // Add territory points to the region's geometry
+        if (territoryFeatures.length > 0) {
+          const combinedGeometry = {
+            type: 'GeometryCollection',
+            geometries: [
+              ...regionStates.map(state => state.geometry),
+              ...territoryFeatures.map(t => t.geometry)
+            ]
+          };
+          return {
+            ...region,
+            geometry: combinedGeometry
+          };
+        }
+      }
+
       if (regionStates.length === 0) return region;
 
       const combinedGeometry = {
         type: 'MultiPolygon',
         coordinates: regionStates.flatMap(state => {
-          // Handle the geometry from us-state-boundaries format
           const coords = state.geometry.coordinates;
           if (state.geometry.type === 'MultiPolygon') {
             return coords;
           }
-          // If it's a Polygon, wrap it in an extra array to make it MultiPolygon format
           return [coords];
         })
       };
@@ -130,6 +177,110 @@ const S3_URLS = {
   cities: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/us_cities.geojson',
   reservations: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/other_reservation.geojson'
 };
+
+// Update the PacificInsetMap component to remove permanent popups
+const PacificInsetMap = React.memo(({ geoData, regionStyle }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <div className="leaflet-bottom leaflet-left" style={{ 
+      margin: "20px", 
+      zIndex: 1000, 
+      pointerEvents: "auto",
+      position: "absolute",
+      bottom: 20,
+      left: 20
+    }}>
+      <div className="bg-white bg-opacity-90 p-2 rounded-lg shadow-md">
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="absolute -right-3 top-2 w-fit bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+          style={{zIndex: 1001}}
+          title={isCollapsed ? "Show Pacific territories" : "Hide Pacific territories"}
+        >
+          <span className="text-gray-700">
+            {isCollapsed ? '+' : '-'}
+          </span>
+        </button>
+
+        {!isCollapsed ? (
+          <>
+            <h4 className="text-lg font-bold mb-2 text-gray-800">Pacific Territories</h4>
+            <p className="text-xs text-gray-600 mb-2">Part of Pacific West Region</p>
+            <MapContainer 
+              key="pacific-inset"
+              center={[14.5, 145.5]}
+              zoom={6}
+              style={{ height: "300px", width: "370px" }}
+              zoomControl={true}
+              dragging={true}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              
+              {geoData?.states && (
+                <GeoJSON 
+                  key={`pacific-territories-${geoData.states.features.length}`}
+                  data={{
+                    type: 'FeatureCollection',
+                    features: geoData.states.features.filter(f => 
+                      ['MP', 'GU'].includes(f.properties.stusab)
+                    )
+                  }}
+                  style={{
+                    fillColor: REGION_COLORS['Pacific West'],
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.3
+                  }}
+                  onEachFeature={(feature, layer) => {
+                    layer.bindPopup(`
+                      <div class="p-2">
+                        <h3 class="font-bold text-sm">${feature.properties.basename}</h3>
+                        <p class="text-xs text-gray-600">Pacific West Region</p>
+                        <p class="text-xs mt-1">
+                          Center: ${feature.properties.centlat.toFixed(2)}°N, 
+                          ${feature.properties.centlon.toFixed(2)}°E
+                        </p>
+                      </div>
+                    `);
+                    
+                    layer.on({
+                      mouseover: (e) => {
+                        layer.setStyle({
+                          fillOpacity: 0.7,
+                          weight: 3
+                        });
+                      },
+                      mouseout: (e) => {
+                        layer.setStyle({
+                          fillOpacity: 0.3,
+                          weight: 2
+                        });
+                      }
+                    });
+                  }}
+                />
+              )}
+            </MapContainer>
+            <div className="mt-2 text-xs text-gray-600">
+              <p>• Interactive map of Guam and Northern Mariana Islands</p>
+              <p>• Click territories for details</p>
+              <p>• Zoom and pan enabled</p>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm font-medium text-center text-gray-800">Click + to view Pacific territories</p>
+        )}
+      </div>
+    </div>
+  );
+});
 
 const ResourceMap = () => {
   const hasReservationsNearby = (feature, type) => {
@@ -542,6 +693,9 @@ const ResourceMap = () => {
         reservations={geoData.reservations}
         epaData={epaData}
       />
+
+      {/* Only render PacificInsetMap when data is available */}
+      {geoData.states && <PacificInsetMap geoData={geoData} regionStyle={regionStyle} />}
     </div>
   );
 };
