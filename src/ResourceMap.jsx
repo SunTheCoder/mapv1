@@ -511,12 +511,12 @@ const ResourceMap = () => {
             />}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay name="County Boundaries" checked={false}>
+          {/* <LayersControl.Overlay name="County Boundaries" checked={false}>
             {geoData.counties && <GeoJSON 
               data={geoData.counties} 
               style={{color: '#999', weight: 1, fillOpacity: 0.05}} 
             />}
-          </LayersControl.Overlay>
+          </LayersControl.Overlay> */}
 
           <LayersControl.Overlay checked name="Tribal Nations">
             {geoData.reservations && <GeoJSON 
@@ -645,12 +645,6 @@ const ResourceMap = () => {
                     }}></div>
                     <div>
                       <p className="text-sm font-medium text-gray-800">{region}</p>
-                      {/* {region === 'Pacific West' && (
-                        <p className="text-sm text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
-                      )}
-                      {region === 'Southeast' && (
-                        <p className="text-sm text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
-                      )} */}
                     </div>
                   </div>
                 ))}
@@ -659,26 +653,6 @@ const ResourceMap = () => {
 
                 {/* Other Layers Section */}
                 <h3 className="font-bold text-lg text-gray-800 mb-2">Other Layers</h3>
-                <div className="flex items-center gap-2">
-                  <div style={{ 
-                    width: "20px", 
-                    height: "20px", 
-                    backgroundColor: "#2563eb",
-                    opacity: 0.3,
-                    border: "1px solid #2563eb"
-                  }}></div>
-                  <p className="text-sm font-medium text-gray-800">States with Tribal Nations</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div style={{ 
-                    width: "20px", 
-                    height: "20px", 
-                    backgroundColor: "#999",
-                    opacity: 0.3,
-                    border: "1px solid #999"
-                  }}></div>
-                  <p className="text-sm font-medium text-gray-800">County Boundaries</p>
-                </div>
                 <div className="flex items-center gap-2">
                   <div style={{ 
                     width: "20px", 
