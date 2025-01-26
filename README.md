@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CEC Interactive Map Demo
+
+An interactive mapping application built with Next.js that visualizes EPA data and tribal reservations across different regions of the United States.
+
+## Features
+
+- Interactive map visualization using React-Leaflet
+- Real-time EPA data integration with ArcGIS services
+- Regional overlays with state and county boundaries
+- Tribal reservation locations and details
+- Caching system for improved performance
+- Edge runtime support for handling long-running requests
+
+## Tech Stack
+
+- Next.js 15.1.6
+- React 18.3.1
+- React-Leaflet v5.0.0-rc.1
+- TailwindCSS for styling
+- Vercel for deployment
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository
+2. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+4. Open [https://cec-map-demo-c7q8bmjt3-suns-projects-fbf4e3bd.vercel.app/map](https://cec-map-demo-c7q8bmjt3-suns-projects-fbf4e3bd.vercel.app/map) in your browser to see the application.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data Sources
 
-## Learn More
+- EPA Data: ArcGIS Feature Service
+- Geographic Data: S3-hosted GeoJSON files including:
+  - US State Boundaries
+  - County Boundaries
+  - City Locations
+  - Tribal Reservations
 
-To learn more about Next.js, take a look at the following resources:
+## API Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application includes an optimized EPA data endpoint at `/api/epa` that:
+- Implements edge runtime for better performance
+- Includes intelligent caching
+- Handles timeouts gracefully
+- Provides fallback data on errors
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+This project is optimized for deployment on Vercel. The edge runtime and caching strategies are specifically configured for production performance.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+No environment variables are required for basic operation. The application uses public APIs and S3 buckets for data access.
