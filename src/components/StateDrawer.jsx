@@ -38,7 +38,7 @@ const StateDrawer = ({ stateData, reservations, epaData }) => {
   return (
     <div style={{ 
       position: 'absolute',
-      left: '10px',
+      left: '20px',
       top: '80px',
       zIndex: 1000
     }}>
@@ -50,7 +50,7 @@ const StateDrawer = ({ stateData, reservations, epaData }) => {
           title={isExpanded ? "Hide details" : "Show details"}
         >
           <span className="text-gray-700">
-            {isExpanded ? '←' : '→'}
+            {isExpanded ? '+' : '-'}
           </span>
         </button>
 

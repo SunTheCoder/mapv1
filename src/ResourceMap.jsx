@@ -184,7 +184,7 @@ const PacificInsetMap = React.memo(({ geoData, regionStyle }) => {
 
   return (
     <div className="leaflet-bottom leaflet-left" style={{ 
-      margin: "20px", 
+       
       zIndex: 1000, 
       pointerEvents: "auto",
       position: "absolute",
