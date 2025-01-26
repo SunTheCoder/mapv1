@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+"use client"
+
 import { MapContainer, TileLayer, GeoJSON, LayersControl, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import React, { useEffect, useState } from "react";
 import * as L from 'leaflet';
 import { epaDataManager } from './utils/epaDataManager';
 import StateDrawer from './components/StateDrawer';

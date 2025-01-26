@@ -1,19 +1,17 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import ResourceMap from '@/ResourceMap';
+import { useMemo } from 'react';
+// import ResourceMap from '@/components/ResourceMap';
 
-// const ResourceMap = dynamic(() => import('@/ResourceMap'), {
-//   ssr: false,
-//   loading: () => <div>Loading map...</div>
-// });
+export default function MapPage() {
+    const Map = useMemo(() => dynamic(() => import('@/ResourceMap'),
+{ loading: () => <p>Loading Map</p>,
+    ssr: false
 
-const MapPage = () => {
-  return (
-    <div className="w-full h-screen">
-      <ResourceMap />
-    </div>
-  );
-};
+}), [])
 
-export default MapPage;
+return <div>
+    <Map />
+</div>
+}
