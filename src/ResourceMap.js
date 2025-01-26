@@ -300,11 +300,12 @@ const ResourceMap = () => {
               style={{zIndex: 1001}}
               title={isLegendExpanded ? "Hide legend" : "Show legend"}
             >
-              {isLegendExpanded ? '←' : '→'}
+              <span className="text-gray-700">
+                {isLegendExpanded ? '←' : '→'}
+              </span>
             </button>
-            
             {!isLegendExpanded ? (
-              <p className="text-sm font-medium text-center">Click arrow to view map legend</p>
+              <p className="text-sm font-medium text-center text-gray-800">Click arrow to view map legend</p>
             ) : (
               <div className="opacity-100">
                 <div className="flex flex-col gap-2">
@@ -316,7 +317,7 @@ const ResourceMap = () => {
                       opacity: 0.3,
                       border: "1px solid #2563eb"
                     }}></div>
-                    <p className="text-sm font-medium">States with Tribal Nations</p>
+                    <p className="text-sm font-medium text-gray-800">States with Tribal Nations</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div style={{ 
@@ -326,7 +327,7 @@ const ResourceMap = () => {
                       opacity: 0.3,
                       border: "1px solid #999"
                     }}></div>
-                    <p className="text-sm font-medium">County Boundaries</p>
+                    <p className="text-sm font-medium text-gray-800">County Boundaries</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div style={{ 
@@ -337,7 +338,7 @@ const ResourceMap = () => {
                       border: "1px solid #000",
                       borderRadius: "50%"
                     }}></div>
-                    <p className="text-sm font-medium">Cities near Tribal Nations</p>
+                    <p className="text-sm font-medium text-gray-800">Cities near Tribal Nations</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div style={{ 
@@ -347,7 +348,7 @@ const ResourceMap = () => {
                       opacity: 0.3,
                       border: "1px solid #060"
                     }}></div>
-                    <p className="text-sm font-medium">Tribal Nation Boundaries</p>
+                    <p className="text-sm font-medium text-gray-800">Tribal Nation Boundaries</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div style={{ 
@@ -357,7 +358,7 @@ const ResourceMap = () => {
                       opacity: 0.3,
                       border: "1px solid #ef4444"
                     }}></div>
-                    <p className="text-sm font-medium">EPA Communities</p>
+                    <p className="text-sm font-medium text-gray-800">EPA Communities</p>
                   </div>
                   <p className="text-xs text-gray-600 mt-2">
                     Click on a highlighted area to view more information. <br></br>

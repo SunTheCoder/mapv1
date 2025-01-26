@@ -30,7 +30,7 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations, epaData }) => {
         zIndex: 1000
       }}>
         <div className="bg-white rounded-lg shadow-lg w-48 p-4">
-          <p className="text-sm font-medium text-center">Click on the map for details</p>
+          <p className="text-sm font-medium text-center text-gray-800">Click on the map for details</p>
         </div>
       </div>
     );
@@ -64,9 +64,10 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations, epaData }) => {
             style={{zIndex: 1001}}
             title={isExpanded ? "Hide details" : "Show details"}
           >
-            {isExpanded ? '←' : '→'}
+            <span className="text-gray-700">
+              {isExpanded ? '←' : '→'}
+            </span>
           </button>
-          
           {!isExpanded ? (
             <div className="p-4">
               <p className="text-sm font-medium text-center">Click arrow to view {stateData.name} details</p>
