@@ -50,7 +50,7 @@ const StateDrawer = ({ stateData, reservations, epaData }) => {
           title={isExpanded ? "Hide details" : "Show details"}
         >
           <span className="text-gray-700">
-            {isExpanded ? '-' : '+'}
+            {isExpanded ? '←' : '→'}
           </span>
         </button>
 
@@ -70,7 +70,7 @@ const StateDrawer = ({ stateData, reservations, epaData }) => {
                       <p className="text-gray-600 mb-2">
                         Total Tribal Nations: {stateReservations.length}
                       </p>
-                      <div className="space-y-2">
+                      <div className="space-y-2 max-h-[330px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {stateReservations.map((reservation, index) => (
                           <div 
                             key={index}
@@ -99,7 +99,7 @@ const StateDrawer = ({ stateData, reservations, epaData }) => {
                 </div>
               </>
             ) : (
-              <p className="text-sm font-medium text-center text-gray-800">Click on the map to view details</p>
+              <p className="text-sm font-medium text-center text-gray-800">Click on a state to view details</p>
             )}
           </div>
         )}
