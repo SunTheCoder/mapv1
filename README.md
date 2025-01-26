@@ -1,6 +1,6 @@
 # CEC Interactive Map Demo
 
-An interactive mapping application built with Next.js that visualizes EPA data and tribal reservations across different regions of the United States.
+An interactive mapping application built with Next.js that visualizes EPA data and tribal nations across different regions of the United States.
 
 ## Features
 
