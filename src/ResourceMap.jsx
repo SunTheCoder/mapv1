@@ -338,15 +338,15 @@ const ResourceMap = () => {
             />}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay name="Tribal Nations">
+          <LayersControl.Overlay checked name="Tribal Nations">
             {geoData.reservations && <GeoJSON 
               data={geoData.reservations} 
-              style={{color: '#060', weight: 1, fillOpacity: 0.1}}
+              style={{color: '#7FDBDA', weight: 1, fillOpacity: 0.7}}
               onEachFeature={onEachFeature}
             />}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay name="Cities near Tribal Nations" checked={false}>
+          {/* <LayersControl.Overlay name="Cities near Tribal Nations" checked={false}>
             {geoData.cities && geoData.reservations && (
               <GeoJSON 
                 data={filterCitiesNearReservations(geoData.cities, geoData.reservations)}
@@ -361,7 +361,7 @@ const ResourceMap = () => {
                 onEachFeature={onEachCity}
               />
             )}
-          </LayersControl.Overlay>
+          </LayersControl.Overlay> */}
 
           <LayersControl.Overlay name="EPA Disadvantaged Communities">
             {epaData && (
