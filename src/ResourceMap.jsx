@@ -164,7 +164,7 @@ const ResourceMap = () => {
     isOpen: false,
     stateData: null
   });
-  const [isLegendExpanded, setIsLegendExpanded] = useState(false);
+  const [isLegendExpanded, setIsLegendExpanded] = useState(true);
   const [activeLayers, setActiveLayers] = useState(['regions']);
 
   useEffect(() => {
@@ -472,12 +472,12 @@ const ResourceMap = () => {
                     }}></div>
                     <div>
                       <p className="text-sm font-medium text-gray-800">{region}</p>
-                      {region === 'Pacific West' && (
+                      {/* {region === 'Pacific West' && (
                         <p className="text-sm text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
                       )}
                       {region === 'Southeast' && (
                         <p className="text-sm text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 ))}
