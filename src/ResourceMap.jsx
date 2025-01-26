@@ -445,21 +445,21 @@ const ResourceMap = () => {
         <div className={`bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-xs transition-all duration-300 ${!isLegendExpanded ? 'w-48' : ''}`}>
           <button 
             onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-            className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+            className="absolute -right-3 top-2 w-fit bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
             style={{zIndex: 1001}}
             title={isLegendExpanded ? "Hide legend" : "Show legend"}
           >
             <span className="text-gray-700">
-              {isLegendExpanded ? '←' : '→'}
+              {isLegendExpanded ? '-' : '+'}
             </span>
           </button>
           {!isLegendExpanded ? (
-            <p className="text-sm font-medium text-center text-gray-800">Click arrow to view map legend</p>
+            <p className="text-sm font-medium text-center text-gray-800">Click + to view legend</p>
           ) : (
             <div className="opacity-100">
               <div className="flex flex-col gap-2">
                 {/* CEC Regions Section */}
-                <h3 className="font-medium text-gray-800 mb-2">CEC Regional Partners</h3>
+                <h3 className="font-bold text-lg text-gray-800 mb-2">CEC Regional Partners</h3>
                 {Object.entries(REGION_COLORS).map(([region, color]) => (
                   <div key={region} className="flex items-center gap-2">
                     <div style={{ 
@@ -473,10 +473,10 @@ const ResourceMap = () => {
                     <div>
                       <p className="text-sm font-medium text-gray-800">{region}</p>
                       {region === 'Pacific West' && (
-                        <p className="text-xs text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
+                        <p className="text-sm text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
                       )}
                       {region === 'Southeast' && (
-                        <p className="text-xs text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
+                        <p className="text-sm text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
                       )}
                     </div>
                   </div>
@@ -485,7 +485,7 @@ const ResourceMap = () => {
                 <div className="border-t border-gray-200 my-4"></div>
 
                 {/* Other Layers Section */}
-                <h3 className="font-medium text-gray-800 mb-2">Other Layers</h3>
+                <h3 className="font-bold text-lg text-gray-800 mb-2">Other Layers</h3>
                 <div className="flex items-center gap-2">
                   <div style={{ 
                     width: "20px", 
@@ -526,7 +526,7 @@ const ResourceMap = () => {
                   }}></div>
                   <p className="text-sm font-medium text-gray-800">EPA Communities</p>
                 </div>
-                <p className="text-xs text-gray-600 mt-2">
+                <p className="text-sm text-gray-600 mt-2">
                   Click on a highlighted area to view more information. <br></br>
                   Each layer has unique information.
                 </p>
