@@ -131,6 +131,59 @@ const S3_URLS = {
   reservations: 'https://cec-geo-data.s3.us-east-2.amazonaws.com/other_reservation.geojson'
 };
 
+// Add this new component for the regions legend
+const RegionsLegend = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <div className="leaflet-top leaflet-right" style={{ margin: "150px", marginRight: "20px", zIndex: 1000, pointerEvents: "auto" }}>
+      <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md relative">
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="absolute -right-3 top-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+          style={{zIndex: 1001}}
+          title={isCollapsed ? "Show regions" : "Hide regions"}
+        >
+          <span className="text-gray-700">
+            {isCollapsed ? '→' : '←'}
+          </span>
+        </button>
+
+        {!isCollapsed ? (
+          <>
+            <h3 className="font-bold text-gray-800 text-lg mb-4">CEC Grant Regions</h3>
+            <div className="flex flex-col gap-2">
+              {Object.entries(REGION_COLORS).map(([region, color]) => (
+                <div key={region} className="flex items-center gap-3">
+                  <div style={{ 
+                    width: "24px", 
+                    height: "24px", 
+                    backgroundColor: color,
+                    opacity: 0.7,
+                    border: "1px solid rgba(0,0,0,0.2)",
+                    borderRadius: "4px"
+                  }}></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">{region}</p>
+                    {region === 'Pacific West' && (
+                      <p className="text-xs text-gray-600">Including Am. Samoa, Guam, Northern Mariana Islands</p>
+                    )}
+                    {region === 'Southeast' && (
+                      <p className="text-xs text-gray-600">Including Puerto Rico & U.S. Virgin Islands</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="text-sm font-medium text-gray-800 pr-4">Grant Regions</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ResourceMap = () => {
   const hasReservationsNearby = (feature, type) => {
     if (!geoData.reservations) return false;
@@ -296,6 +349,9 @@ const ResourceMap = () => {
         zoom={4}
         style={{ height: "100%", width: "100%" }}
       >
+        {/* Add the RegionsLegend component */}
+        {activeLayers.includes('regions') && <RegionsLegend />}
+
         {/* Info Box */}
         <div className="leaflet-bottom leaflet-right" style={{ margin: "20px", marginLeft: "70px", zIndex: 1000, pointerEvents: "auto" }}>
           <div className={`bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-xs transition-all duration-300 ${!isLegendExpanded ? 'w-48' : ''}`}>
@@ -450,8 +506,8 @@ const ResourceMap = () => {
             checked={true}
             name="Grant Regions"
             eventHandlers={{
-              add: (e) => setActiveLayers(prev => [...prev, 'regions']),
-              remove: (e) => setActiveLayers(prev => prev.filter(layer => layer !== 'regions'))
+              add: () => setActiveLayers(prev => [...prev, 'regions']),
+              remove: () => setActiveLayers(prev => prev.filter(layer => layer !== 'regions'))
             }}
           >
             {geoData.states && (
