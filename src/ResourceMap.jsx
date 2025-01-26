@@ -346,23 +346,6 @@ const ResourceMap = () => {
             />}
           </LayersControl.Overlay>
 
-          {/* <LayersControl.Overlay name="Cities near Tribal Nations" checked={false}>
-            {geoData.cities && geoData.reservations && (
-              <GeoJSON 
-                data={filterCitiesNearReservations(geoData.cities, geoData.reservations)}
-                pointToLayer={(feature, latlng) => L.circleMarker(latlng, {
-                  radius: 8,
-                  fillColor: "#22c55e",
-                  color: "#000",
-                  weight: 1,
-                  opacity: 1,
-                  fillOpacity: 0.8
-                })}
-                onEachFeature={onEachCity}
-              />
-            )}
-          </LayersControl.Overlay> */}
-
           <LayersControl.Overlay name="EPA Disadvantaged Communities">
             {epaData && (
               <GeoJSON
@@ -527,20 +510,9 @@ const ResourceMap = () => {
                   <div style={{ 
                     width: "20px", 
                     height: "20px", 
-                    backgroundColor: "#22c55e",
-                    opacity: 0.8,
-                    border: "1px solid #000",
-                    borderRadius: "50%"
-                  }}></div>
-                  <p className="text-sm font-medium text-gray-800">Cities near Tribal Nations</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div style={{ 
-                    width: "20px", 
-                    height: "20px", 
-                    backgroundColor: "#060",
-                    opacity: 0.3,
-                    border: "1px solid #060"
+                    backgroundColor: "#7FDBDA",
+                    opacity: 0.7,
+                    border: "1px solid #7FDBDA"
                   }}></div>
                   <p className="text-sm font-medium text-gray-800">Tribal Nation Boundaries</p>
                 </div>
