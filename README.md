@@ -32,7 +32,7 @@ npm install
 npm run dev
 ```
 
-4. Open [https://cec-map-demo-c7q8bmjt3-suns-projects-fbf4e3bd.vercel.app/map](https://cec-map-demo-c7q8bmjt3-suns-projects-fbf4e3bd.vercel.app/map) in your browser to see the application.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## Data Sources
 
