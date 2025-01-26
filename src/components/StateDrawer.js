@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import * as L from 'leaflet';
 
+
+
 const StateDrawer = ({ isOpen, onClose, stateData, reservations, epaData }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const formatNumber = (num) => {
+    if (!num) return '0';
+    return new Intl.NumberFormat('en-US').format(Math.round(num));
+  };
+
+  const formatArea = (squareMeters) => {
+    if (!squareMeters) return '0';
+    const squareMiles = squareMeters / (1609.34 * 1609.34);
+    return formatNumber(squareMiles);
+  };
 
   console.log(epaData);
 
@@ -121,25 +134,55 @@ const StateDrawer = ({ isOpen, onClose, stateData, reservations, epaData }) => {
             <div className="space-y-4">
               <div>
                 <h3 className="font-semibold text-gray-700">Geographic Information</h3>
-                <p className="text-gray-600">Area: {selectedReservation.properties.ALAND} sq meters</p>
-                <p className="text-gray-600">Water Area: {selectedReservation.properties.AWATER} sq meters</p>
+                <p className="text-gray-600">Land Area: {formatArea(selectedReservation.aland)} sq mi</p>
+                <p className="text-gray-600">Water Area: {formatArea(selectedReservation.awater)} sq mi</p>
+                <p className="text-gray-600">FIPS: {selectedReservation.geoid}</p>
               </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-700">Administrative Details</h3>
-                <p className="text-gray-600">FIPS Code: {selectedReservation.properties.GEOID}</p>
-                <p className="text-gray-600">Class: {selectedReservation.properties.MTFCC}</p>
-              </div>
+              {epaData?.features && (
+                <div>
+                  <h3 className="font-semibold text-gray-700">EPA Status</h3>
+                  {(() => {
+                    console.log('Selected Reservation:', selectedReservation);
+                    console.log('EPA Features:', epaData.features);
+                    
+                    // Check if any EPA feature's coordinates contain the reservation's coordinates
+                    const matchingEpaFeature = epaData.features.find(epaFeature => {
+                      // Get first coordinate of reservation (as a sample point)
+                      const [resLng, resLat] = selectedReservation.geometry.coordinates[0][0];
+                      
+                      // Check if this point is within EPA feature's polygon
+                      const epaCoords = epaFeature.geometry.coordinates[0];
+                      let inside = false;
+                      
+                      // Simple point-in-polygon check
+                      for (let i = 0, j = epaCoords.length - 1; i < epaCoords.length; j = i++) {
+                        const [xi, yi] = epaCoords[i];
+                        const [xj, yj] = epaCoords[j];
+                        
+                        const intersect = ((yi > resLat) !== (yj > resLat))
+                            && (resLng < (xj - xi) * (resLat - yi) / (yj - yi) + xi);
+                        if (intersect) inside = !inside;
+                      }
+                      
+                      return inside;
+                    });
 
-              <div>
-                <h3 className="font-semibold text-gray-700">EPA Status</h3>
-                <p className="text-gray-600">
-                  {epaData.features.find(epa => epa.properties.GEOID === selectedReservation.properties.ID)?.properties.Disadvantaged ? 
-                    <span className="text-red-600 font-medium">Disadvantaged Community</span> : 
-                    <span className="text-green-600 font-medium">Not Disadvantaged</span>
-                  }
-                </p>
-              </div>
+                    if (matchingEpaFeature) {
+                      return (
+                        <p className="text-gray-600">
+                          {matchingEpaFeature.properties.Disadvantaged === "Yes" ? 
+                            <span className="text-red-600 font-medium">Disadvantaged Community</span> : 
+                            <span className="text-green-600 font-medium">Not Disadvantaged</span>
+                          }
+                        </p>
+                      );
+                    } else {
+                      return <p className="text-gray-500 italic">Not within EPA assessment boundaries</p>;
+                    }
+                  })()}
+                </div>
+              )}
 
               <div className="max-h-[40vh] overflow-y-auto">
                 <pre className="bg-gray-50 p-4 rounded text-sm overflow-x-auto">
