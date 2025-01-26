@@ -136,7 +136,7 @@ const RegionsLegend = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="leaflet-top leaflet-right" style={{ margin: "150px", marginRight: "20px", zIndex: 1000, pointerEvents: "auto" }}>
+    <div className="leaflet-top leaflet-right" style={{ margin: "470px", marginRight: "20px", zIndex: 1000, pointerEvents: "auto" }}>
       <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md relative">
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
