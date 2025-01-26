@@ -165,6 +165,7 @@ const ResourceMap = () => {
     stateData: null
   });
   const [isLegendExpanded, setIsLegendExpanded] = useState(false);
+  const [activeLayers, setActiveLayers] = useState(['regions']);
 
   useEffect(() => {
     const fetchGeoData = async () => {
@@ -380,7 +381,7 @@ const ResourceMap = () => {
         />
 
         <LayersControl position="topright">
-          <LayersControl.Overlay checked name="State Boundaries">
+          <LayersControl.Overlay name="State Boundaries">
             {geoData.states && <GeoJSON 
               data={geoData.states}
               style={(feature) => ({
@@ -445,7 +446,14 @@ const ResourceMap = () => {
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay name="Grant Regions">
+          <LayersControl.Overlay 
+            checked={true}
+            name="Grant Regions"
+            eventHandlers={{
+              add: (e) => setActiveLayers(prev => [...prev, 'regions']),
+              remove: (e) => setActiveLayers(prev => prev.filter(layer => layer !== 'regions'))
+            }}
+          >
             {geoData.states && (
               <GeoJSON 
                 key="grant-regions"
