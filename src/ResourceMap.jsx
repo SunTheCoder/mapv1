@@ -342,6 +342,22 @@ const ResourceMap = () => {
     `);
   };
 
+  const filterCitiesNearReservations = (cities, reservations) => {
+    if (!cities || !reservations) return null;
+    
+    return {
+      ...cities,
+      features: cities.features.filter(city => {
+        const cityPoint = L.latLng(city.geometry.coordinates[1], city.geometry.coordinates[0]);
+        return reservations.features.some(reservation => {
+          const [lon, lat] = reservation.geometry.coordinates[0][0];
+          const reservationPoint = L.latLng(lat, lon);
+          return cityPoint.distanceTo(reservationPoint) <= 100000; // 100km in meters
+        });
+      })
+    };
+  };
+
   return (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       <MapContainer 
@@ -466,18 +482,20 @@ const ResourceMap = () => {
           </LayersControl.Overlay>
 
           <LayersControl.Overlay name="Cities near Tribal Nations" checked={false}>
-            {geoData.cities && <GeoJSON 
-              data={geoData.cities}
-              pointToLayer={(feature, latlng) => L.circleMarker(latlng, {
-                radius: 8,
-                fillColor: "#22c55e",
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-              })}
-              onEachFeature={onEachCity}
-            />}
+            {geoData.cities && geoData.reservations && (
+              <GeoJSON 
+                data={filterCitiesNearReservations(geoData.cities, geoData.reservations)}
+                pointToLayer={(feature, latlng) => L.circleMarker(latlng, {
+                  radius: 8,
+                  fillColor: "#22c55e",
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+                })}
+                onEachFeature={onEachCity}
+              />
+            )}
           </LayersControl.Overlay>
 
           <LayersControl.Overlay name="EPA Disadvantaged Communities">
@@ -530,7 +548,7 @@ const ResourceMap = () => {
               {selectedFeature.isCity ? (
                 <div>
                   <h5 className="text-md font-semibold text-gray-700 mt-2">
-                    Reservations within 100km of this city:
+                    Tribal nations within 100km of this city:
                   </h5>
                   {selectedFeature.reservations.length > 0 ? (
                     <ul className="mt-2 max-h-40 overflow-y-auto">
@@ -540,7 +558,7 @@ const ResourceMap = () => {
                     </ul>
                   ) : (
                     <p className="text-sm text-gray-600 mt-2">
-                      No reservations found near this city.
+                      No tribal nations found near this city.
                     </p>
                   )}
                 </div>
