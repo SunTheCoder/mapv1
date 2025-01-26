@@ -468,7 +468,7 @@ const ResourceMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <LayersControl position="topright">
+        <LayersControl position="topright" collapsed={false}>
           <LayersControl.Overlay name="State Boundaries">
             {geoData.states && <GeoJSON 
               data={geoData.states}
@@ -519,14 +519,7 @@ const ResourceMap = () => {
             )}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay 
-            checked={true}
-            name="Grant Regions"
-            eventHandlers={{
-              add: () => setActiveLayers(prev => [...prev, 'regions']),
-              remove: () => setActiveLayers(prev => prev.filter(layer => layer !== 'regions'))
-            }}
-          >
+          <LayersControl.Overlay checked={true} name="Grant Regions">
             {geoData.states && (
               <GeoJSON 
                 key="grant-regions"
