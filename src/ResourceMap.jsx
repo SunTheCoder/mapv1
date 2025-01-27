@@ -23,9 +23,9 @@ const REGION_COLORS = {
 const REGION_STATES = {
   'Pacific West': ['WA', 'OR', 'CA', 'NV', 'AK', 'HI', 'AS', 'GU', 'MP'],
   'West Central': ['MT', 'ID', 'WY', 'UT', 'CO', 'AZ', 'NM', 'ND', 'SD', 'NE', 'KS', 'IA', 'MN', 'MO'],
-  'South Central': ['TX', 'OK', 'AR', 'LA'],
-  'East Central': ['WI', 'MI', 'IL', 'IN', 'OH', 'KY', 'TN', 'WV', 'VA'],
-  'Southeast': ['NC', 'SC', 'GA', 'FL', 'AL', 'MS', 'PR', 'VI'],
+  'South Central': ['TX', 'OK', 'AR', 'LA', 'MS', 'AL'],
+  'East Central': ['WI', 'MI', 'IL', 'IN', 'OH', 'KY', 'TN', 'WV'],
+  'Southeast': ['NC', 'SC', 'GA', 'FL', 'PR', 'VI', 'VA'],
   'Northeast': ['ME', 'NH', 'VT', 'MA', 'RI', 'CT', 'NY', 'PA', 'NJ', 'DE', 'MD', 'DC']
 };
 
@@ -521,7 +521,7 @@ const ResourceMap = () => {
           <LayersControl.Overlay checked name="Tribal Nations">
             {geoData.reservations && <GeoJSON 
               data={geoData.reservations} 
-              style={{color: '#7FDBDA', weight: 1, fillOpacity: 0.7}}
+              style={{color: '#4DB6B5', weight: 2, fillColor: '#7FDBDA', fillOpacity: 0.7}}
               onEachFeature={onEachFeature}
             />}
           </LayersControl.Overlay>
