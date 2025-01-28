@@ -363,6 +363,18 @@ const ResourceMap = () => {
 
   const onEachFeature = (feature, layer) => {
     layer.on({
+      mouseover: (e) => {
+        layer.setStyle({
+          fillOpacity: 0.9,
+          weight: 3
+        });
+      },
+      mouseout: (e) => {
+        layer.setStyle({
+          fillOpacity: 0.7,
+          weight: 2
+        });
+      },
       click: (e) => {
         setSelectedFeature({
           name: feature.properties.BASENAME || "Unknown Location",
@@ -518,11 +530,24 @@ const ResourceMap = () => {
             />}
           </LayersControl.Overlay> */}
 
-          <LayersControl.Overlay checked name="Tribal Nations">
+          <LayersControl.Overlay checked={true} name="CEC Partner Regions">
+            {geoData.states && (
+              <GeoJSON 
+                key="grant-regions"
+                data={processRegionsData(geoData.states)}
+                style={regionStyle}
+                onEachFeature={onEachRegion}
+                zIndex={1}
+              />
+            )}
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay checked={true} name="Tribal Nations">
             {geoData.reservations && <GeoJSON 
               data={geoData.reservations} 
               style={{color: '#4DB6B5', weight: 2, fillColor: '#7FDBDA', fillOpacity: 0.7}}
               onEachFeature={onEachFeature}
+              zIndex={1000}
             />}
           </LayersControl.Overlay>
 
@@ -544,18 +569,6 @@ const ResourceMap = () => {
                     </div>
                   `);
                 }}
-              />
-            )}
-          </LayersControl.Overlay>
-
-          <LayersControl.Overlay checked={true} name="Grant Regions">
-            {geoData.states && (
-              <GeoJSON 
-                key="grant-regions"
-                data={processRegionsData(geoData.states)}
-                style={regionStyle}
-                onEachFeature={onEachRegion}
-                zIndex={1000}
               />
             )}
           </LayersControl.Overlay>
